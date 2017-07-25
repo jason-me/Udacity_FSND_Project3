@@ -14,7 +14,7 @@ def get_popular():
   #"""Return 3 most popular articles from the 'database', based on views."""
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
-  c.execute("select name, id from authors order by name desc;")
+  c.execute("select title, count(*) as views from articles, log where log.path like concat('%',articles.slug,'%') group by title order by views desc limit 3; ")
   return c.fetchall()
   db.close
 
