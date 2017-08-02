@@ -23,7 +23,7 @@ def get_pop_auth():
   row = c.fetchall()
   print("\nMost Popular Authors")
   for i in row:
-    print("\nArticle: {:} \nViews: {:}" .format(i[0], i[1]))
+    print("\nAuthor: {:} \nViews: {:}" .format(i[0], i[1]))
   db.close
 
 def get_error_days():
@@ -34,7 +34,7 @@ def get_error_days():
   row = c.fetchall()
   print("\nDays with > 1% errors")
   for i in row:
-    print("\nArticle: {:} \nViews: {:}" .format(i[0], i[1]))
+    print("\nAuthor: {:} \nViews: {:}" .format(i[0], i[1]))
   db.close
 
 if __name__ == "__main__":
