@@ -30,11 +30,19 @@ def get_error_days():
   #Return days that greater than 1% of errors occurred.
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
-  c.execute("select authors.name, count(*) as views from authors, articles, log where authors.id = articles.author and log.path like concat('%',articles.slug) group by authors.name order by views desc;")
+  c.execute("WITH error_count as ("SELECT date(time), count(status) as total
+FROM log
+where status not like '200%'
+group by date(time)
+),
+status_total as (SELECT date(time), count(status) as total
+FROM log group by date(time)
+)
+SELECT error_count.date, (count(*) * 100 / (select count(*) FROM error_count)) as percentage FROM error_count, status_total where error_count.date = status_total.date group by error_count.date;")
   row = c.fetchall()
   print("\nDays with > 1% errors")
   for i in row:
-    print("\nAuthor: {:} \nViews: {:}" .format(i[0], i[1]))
+    print("\nDate {:} \nPercentage: {:}" .format(i[0], i[1]))
   db.close
 
 if __name__ == "__main__":
