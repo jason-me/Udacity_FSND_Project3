@@ -1,0 +1,31 @@
+vagrant@vagrant:/vagrant/Udacity_FSND_Project3$ python3 Logs_Analysis.py
+
+3 Most Popular Articles
+
+Article: Candidate is jerk, alleges rival
+Views: 338647
+
+Article: Bears love berries, alleges bear
+Views: 253801
+
+Article: Bad things gone, say good people
+Views: 170098
+
+Most Popular Authors
+
+Author: Ursula La Multa
+Views: 507594
+
+Author: Rudolf von Treppenwitz
+Views: 423457
+
+Author: Anonymous Contributor
+Views: 170098
+
+Author: Markoff Chaney
+Views: 84557
+
+Days with > 1% errors
+
+Date July     , 17, 2016
+Percentage:    2.26%
