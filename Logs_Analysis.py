@@ -8,7 +8,7 @@ def get_pop_art():
   #Return 3 most popular articles from the 'database', based on views.
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
-  c.execute("select title, count(*) as views from articles, log where log.path like concat('%',articles.slug) group by title order by views desc limit 3;")
+  c.execute('''SELECT title, count(*) AS views FROM articles, log WHERE log.path LIKE concat('%',articles.slug) GROUP BY title ORDER BY views DESC LIMIT 3;''')
   row = c.fetchall()
   print("\n3 Most Popular Articles")
   for i in row:
@@ -19,7 +19,7 @@ def get_pop_auth():
   #Return 3 most popular authors from the 'database', based on total articles views.
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
-  c.execute("select authors.name, count(*) as views from authors, articles, log where authors.id = articles.author and log.path like concat('%',articles.slug) group by authors.name order by views desc;")
+  c.execute('''SELECT authors.name, count(*) AS views FROM authors, articles, log WHERE authors.id = articles.author AND log.path LIKE concat('%',articles.slug) GROUP BY authors.name ORDER BY views DESC;''')
   row = c.fetchall()
   print("\nMost Popular Authors")
   for i in row:
@@ -30,7 +30,7 @@ def get_error_days():
   #Return days that greater than 1% of errors occurred.
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
-  c.execute("WITH error_count as (SELECT date(time), count(status) as total FROM log where status not like '200%' group by date(time)), status_total as (SELECT date(time), count(status) as total FROM log group by date(time)), combined_percent as (SELECT error_count.date as error_date, error_count.total *100.0/ status_total.total as percentage FROM error_count, status_total where error_count.date = status_total.date group by error_count.date, percentage) SELECT to_char(error_date, 'Month, DD, YYYY') as error_day, to_char(percentage,  '999.99%') as error_percent FROM combined_percent where percentage >1;")
+  c.execute('''WITH error_count AS (SELECT date(time), count(status) AS total FROM log WHERE status NOT LIKE '200%' GROUP BY date(time)), status_total AS (SELECT date(time), count(status) AS total FROM log GROUP BY date(time)), combined_percent AS (SELECT error_count.date AS error_date, error_count.total * 100.0/ status_total.total AS percentage FROM error_count, status_total WHERE error_count.date = status_total.date GROUP BY error_count.date, percentage) SELECT to_char(error_date, 'Month, DD, YYYY') AS error_day, to_char(percentage,  '999.99%') AS error_percent FROM combined_percent WHERE percentage > 1;''')
   row = c.fetchall()
   print("\nDays with > 1% errors")
   for i in row:
